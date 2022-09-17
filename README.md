@@ -24,7 +24,8 @@
 
 **Пример исходных изображений**
 
-<img src="data/dataset/one/5.jpg" width="300" height="300" /> <img src="data/dataset/one/8.jpg" width="300" height="300" /> <img src="data/dataset/one/10.jpg" width="300" height="300" />
+<img src="data/dataset/one/5.jpg" width="300" height="300" /> <img src="data/dataset/one/8.jpg" width="300" height="300" />
+<img src="data/dataset/one/10.jpg" width="300" height="300" /> <img src="data/dataset/one/12.jpg" width="300" height="300" />
 
 
 ## Входные данные
@@ -36,4 +37,5 @@
 
 **Пример входных фотографий**
 
-<img src="data/dataset/all/all_1.jpg" width="300" height="300" /> <img src="data/dataset/all/all_3.jpg" width="300" height="300" /> <img src="data/dataset/all/all_5.jpg" width="300" height="300" />
+<img src="data/dataset/all/all_1.jpg" width="300" height="300" /> <img src="data/dataset/all/all_3.jpg" width="300" height="300" />
+<img src="data/dataset/all/all_5.jpg" width="300" height="300" /> <img src="data/dataset/all/all_4.jpg" width="300" height="300" />
