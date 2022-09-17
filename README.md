@@ -10,7 +10,7 @@
 
 
 ## Исходные данные
-Исходные данные можно посмотреть по [ссылке](https://github.com/Brahialis0209/Intelligent-Placer/tree/main/data/dataset/one)
+Исходные данные можно посмотреть по [ссылке](https://github.com/Brahialis0209/Intelligent-Placer/tree/plan-and-data/data/dataset/one)
 
 Требования к этим фотографиям
 
@@ -33,7 +33,7 @@
 Координаты вершин многоугольника выражены в сантиметрах.
 
 
-Входные данные можно посмотреть по [ссылке](https://github.com/Brahialis0209/Intelligent-Placer/tree/main/data/dataset/all)
+Входные данные можно посмотреть по [ссылке](https://github.com/Brahialis0209/Intelligent-Placer/tree/plan-and-data/data/dataset/all)
 
 **Пример входных фотографий**
 
