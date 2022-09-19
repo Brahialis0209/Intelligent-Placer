@@ -38,9 +38,15 @@
 - Не более 10 вершин
 
 
+
 Входные данные можно посмотреть по [ссылке](https://github.com/Brahialis0209/Intelligent-Placer/tree/plan-and-data/data/dataset/all)
 
 **Пример входных фотографий**
 
 <img src="data/dataset/all/all_1.jpg" width="300" height="300" /> <img src="data/dataset/all/all_3.jpg" width="300" height="300" />
 <img src="data/dataset/all/all_5.jpg" width="300" height="300" /> <img src="data/dataset/all/all_4.jpg" width="300" height="300" />
+
+## Результат работы алгоритма:
+
+True - Предметы можно разместить в многоугольнике <br>
+False - Нет возможности разместить без пересечений предметов
