@@ -25,7 +25,7 @@
 **Пример исходных изображений**
 
 <img src="data/dataset/one/2.jpg" width="300" height="300" /> <img src="data/dataset/one/3.jpg" width="300" height="300" />
-<img src="data/dataset/one/4.jpg" width="300" height="300" /> <img src="data/dataset/one/5.jpg" width="300" height="300" />
+<img src="data/dataset/one/4.jpg" width="300" height="300" /> <img src="data/dataset/one/7.jpg" width="300" height="300" />
 
 
 ## Входные данные
