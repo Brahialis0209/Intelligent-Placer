@@ -27,13 +27,8 @@ def placer_start(contours_np, img, polygon_sm):
     max_step_y = 200
     # place the contours of objects in turn
     for contour_num, cnt in enumerate(contours):
-        # generate new point (new center for contour), all nodes will be in polygon
-        p = generate_point_in_poly(cnt, polygon)
-        xM, yM = cnt.get_moments()
-        x_diff = p.x - xM
-        y_diff = p.y - yM
-        # replace out contour to new point
-        transfer_contour(cnt, x_diff, y_diff)
+        # replace out contour to new position in polygon, all nodes will be in polygon
+        transfer_to_poly(cnt, polygon)
         # for debug
         cv2.drawContours(img2, cnt.get_cv_contour(), -1, red_bgr_color, contours_curve_dim)
         cv2.drawContours(img2, polygon.get_cv_contour(), -1, red_bgr_color, contours_curve_dim)
@@ -63,9 +58,8 @@ def placer_start(contours_np, img, polygon_sm):
             # move one step and start to rotate, so a certain number of times
             direct = 0
             while transfer_count < max_transfers:
-                #  generate step (x and y range ) for contour (all nodes will be in polygon)
-                step_x, step_y, direct = generate_step_to_transfer(max_step_x, max_step_y, cnt, polygon, direct)
-                transfer_contour(cnt, step_x, step_y)
+                #  generate step  (x and y range ) and transfer contour (all nodes will be in polygon)
+                direct = generate_step_to_transfer(max_step_x, max_step_y, cnt, polygon, direct)
                 # for debug
                 cv2.drawContours(img2, cnt.get_cv_contour(), -1, red_bgr_color, contours_curve_dim)
                 cv2.drawContours(img2, polygon.get_cv_contour(), -1, red_bgr_color, contours_curve_dim)

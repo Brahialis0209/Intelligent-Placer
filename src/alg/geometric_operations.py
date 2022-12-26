@@ -150,8 +150,8 @@ def intersect_other_contours(cnt: Contour, cnts: list, contour_num: int):
     return False
 
 
-#  generate new point (new center for contour), all nodes will be in polygon
-def generate_point_in_poly(cnt: Contour, poly: Contour):
+#  transfer contour to random position in polygon, all nodes will be in polygon
+def transfer_to_poly(cnt: Contour, poly: Contour):
     x, y, w, h = cv2.boundingRect(poly.get_cv_contour())
     new_x = randint(x, x + w)
     new_y = randint(y, y + h)
@@ -159,16 +159,18 @@ def generate_point_in_poly(cnt: Contour, poly: Contour):
     xM, yM = cnt.get_moments()
     x_diff = p.x - xM
     y_diff = p.y - yM
+    xM += x_diff
+    yM += y_diff
     transfer_contour(cnt, x_diff, y_diff)
     while not point_in_polygon(p, poly) or intersect_contours(cnt, poly):
         new_x = randint(x, x + w)
         new_y = randint(y, y + h)
         p = Point(new_x, new_y)
-        transfer_contour(cnt, -x_diff, -y_diff)
         x_diff = p.x - xM
         y_diff = p.y - yM
+        xM += x_diff
+        yM += y_diff
         transfer_contour(cnt, x_diff, y_diff)
-    transfer_contour(cnt, -x_diff, -y_diff)
     return p
 
 
@@ -180,31 +182,27 @@ def generate_step_to_transfer(step_x, step_y, cnt: Contour, poly: Contour, direc
             transfer_contour(cnt, -step_x, 0)
             direct = 1
         else:
-            transfer_contour(cnt, -step_x, 0)
-            return step_x, 0, direct
+            return direct
     if direct == 1:
         transfer_contour(cnt, 0, step_y)
         if intersect_contours(cnt, poly):
             transfer_contour(cnt, 0, -step_y)
             direct = 2
         else:
-            transfer_contour(cnt, 0, -step_y)
-            return 0, step_y, direct
+            return direct
     if direct == 2:
         transfer_contour(cnt, -step_x, 0)
         if intersect_contours(cnt, poly):
             transfer_contour(cnt, step_x, 0)
             direct = 3
         else:
-            transfer_contour(cnt, step_x, 0)
-            return -step_x, 0, direct
+            return direct
     if direct == 3:
         transfer_contour(cnt, 0, -step_y)
         if intersect_contours(cnt, poly):
             transfer_contour(cnt, 0, step_y)
             direct = 0
         else:
-            transfer_contour(cnt, 0, step_y)
-            return 0, -step_y, direct
+            return direct
 
-    return 0, 0, direct
+    return direct
