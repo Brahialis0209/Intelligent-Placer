@@ -12,6 +12,14 @@ def show_img(img):
     plt.xticks([]), plt.yticks([])  # to hide tick values on X and Y axis
     plt.show()
 
+def save_img(img, cnts: list, poly: Contour, path):
+    for cnt in cnts:
+        cv2.drawContours(img, cnt.get_cv_contour(), -1, red_bgr_color, contours_curve_dim)
+    cv2.drawContours(img, poly.get_cv_contour(), -1, red_bgr_color, contours_curve_dim)
+    plt.imshow(img, cmap='gray', interpolation='bicubic')
+    plt.xticks([]), plt.yticks([])  # to hide tick values on X and Y axis
+    plt.savefig(path)
+
 
 def draw_contours_and_poly(img, cnts: list, poly: Contour):
     for cnt in cnts:

@@ -120,6 +120,7 @@ def point_in_polygon(p: Point, cnt: Contour):
 
 #  Nested contour cnt1 into contour cnt2?
 def contour_in_contours(cnt1: Contour, cnts: list, cnt_num: int):
+    not_nested_count = 0
     for i, cnt in enumerate(cnts):
         if i == cnt_num:
             continue
@@ -127,7 +128,10 @@ def contour_in_contours(cnt1: Contour, cnts: list, cnt_num: int):
             p1 = s.p1
             p2 = s.p2
             if not point_in_polygon(p1, cnt) or not point_in_polygon(p2, cnt):
-                return False
+                not_nested_count += 1
+                break
+    if not_nested_count == len(cnts) - 1:
+        return False
     return True
 
 

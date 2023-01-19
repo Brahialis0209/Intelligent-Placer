@@ -4,13 +4,13 @@ import sys
 from src.alg.data_gen import get_test_data, get_test_poly
 from src.alg.geometric_operations import *
 from src.alg.preprocessing import preprocess_data
-from src.alg.visualization import draw_contours_and_poly, show_img, red_bgr_color, contours_curve_dim
+from src.alg.visualization import draw_contours_and_poly, show_img, red_bgr_color, contours_curve_dim, save_img
 
 sys.path.append('../')
 
 
 # start main algorithm
-def placer_start(contours_np, img, polygon_sm):
+def placer_start(contours_np, img, polygon_sm, date_path, title, iter):
     # for debug
     back_path = os.path.join(os.getcwd(), '../data', 'dataset', 'one')
     image_bgr = cv2.imread(os.path.join(back_path, "back.jpg"), cv2.IMREAD_COLOR)
@@ -31,6 +31,7 @@ def placer_start(contours_np, img, polygon_sm):
     # place the contours of objects in turn
     for contour_num, cnt in enumerate(contours):
         process_contours.append(cnt)
+        # draw_contours_and_poly(image_bgr.copy(), process_contours, polygon)
         # replace out contour to new position in polygon, all nodes will be in polygon
         if contour_num == 0:
             opt_transfer_to_poly(cnt, polygon)
@@ -40,7 +41,8 @@ def placer_start(contours_np, img, polygon_sm):
         # cv2.drawContours(img2, cnt.get_cv_contour(), -1, red_bgr_color, contours_curve_dim)
         # cv2.drawContours(img2, polygon.get_cv_contour(), -1, red_bgr_color, contours_curve_dim)
         # show_img(img2)
-        draw_contours_and_poly(image_bgr.copy(), process_contours, polygon)
+
+        # draw_contours_and_poly(image_bgr.copy(), process_contours, polygon)
         # for the first contour, it makes no sense to check its intersection with other contours
         if contour_num == 0:
             continue
@@ -72,7 +74,9 @@ def placer_start(contours_np, img, polygon_sm):
                 # cv2.drawContours(img2, cnt.get_cv_contour(), -1, red_bgr_color, contours_curve_dim)
                 # cv2.drawContours(img2, polygon.get_cv_contour(), -1, red_bgr_color, contours_curve_dim)
                 # show_img(img2)
-                draw_contours_and_poly(image_bgr.copy(), process_contours, polygon)
+
+
+                # draw_contours_and_poly(image_bgr.copy(), process_contours, polygon)
 
                 if intersect_other_contours(cnt, process_contours, contour_num):
                     rot_count = 0
@@ -96,8 +100,9 @@ def placer_start(contours_np, img, polygon_sm):
                 return False
 
     # for debug
-    img_copy = img.copy()
-    draw_contours_and_poly(image_bgr.copy(), process_contours, polygon)
+    # img_copy = img.copy()
+    # draw_contours_and_poly(image_bgr.copy(), process_contours, polygon)
+    save_img(image_bgr.copy(), process_contours, polygon, date_path + "/" + title + "_" + str(iter) + '_res.png')
     # show_img(img_copy)
     return True
 
@@ -108,17 +113,29 @@ def main():
     # read data
     images, titles = get_test_data(date_path)
     poly = get_test_poly()
+    fail_count = 0
+    success_count = 0
+    total_count = 0
+    contouts = []
+    for id, image in enumerate(images):
+        cnts = preprocess_data(image)
+        contouts.append(cnts)
 
     # we pre-process all images and start placer for every image
-    obj_contours = []
-    for image in images:
-        cnts = preprocess_data(image)
-        obj_contours.append(cnts)
-        status = placer_start(cnts, image, poly)
-        if status:
-            print("True!")
-        else:
-            print("False!")
+    for id, image in enumerate(images):
+        cnts = contouts[id]
+        for iter in range(5):
+            print("Image name: " + titles[id] + " Iteration: " + str(iter))
+            status = placer_start(cnts, image, [poly[id]], date_path, titles[id], iter)
+            if status:
+                success_count += 1
+                print("True!")
+            else:
+                fail_count += 1
+                print("False!")
+            total_count += 1
+    print("Success rate: " + str(success_count / total_count * 100) + "%")
+    print("Failure rate: " + str(fail_count / total_count * 100) + "%")
 
 
 if __name__ == "__main__":
