@@ -10,7 +10,11 @@ from src.alg.geometric_operations import nested_poly
 
 
 # we pre-process all images
+from src.alg.visualization import show_img
+
+
 def preprocess_data(img):
+    # show_img(img)
     # convert to gray gradations
     img_gray = rgb2gray(img)
     # gaussian blur to remove noise
@@ -22,6 +26,7 @@ def preprocess_data(img):
     close_otsu = binary_closing(otsu, footprint=np.ones((20, 20)))
     # for reading opencv2
     cv_close_otsu = img_as_ubyte(close_otsu)
+    # show_img(close_otsu)
     # find contours in processed image
     contours, hierarchy = cv2.findContours(cv_close_otsu, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 

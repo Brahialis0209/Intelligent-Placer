@@ -119,7 +119,8 @@ def point_in_polygon(p: Point, cnt: Contour):
 
 
 #  Nested contour cnt1 into contour cnt2?
-def polygon_in_polygon(cnt1: Contour, cnts: list, cnt_num: int):
+def contour_in_contours(cnt1: Contour, cnts: list, cnt_num: int):
+    not_nested_count = 0
     for i, cnt in enumerate(cnts):
         if i == cnt_num:
             continue
@@ -127,7 +128,10 @@ def polygon_in_polygon(cnt1: Contour, cnts: list, cnt_num: int):
             p1 = s.p1
             p2 = s.p2
             if not point_in_polygon(p1, cnt) or not point_in_polygon(p2, cnt):
-                return False
+                not_nested_count += 1
+                break
+    if not_nested_count == len(cnts) - 1:
+        return False
     return True
 
 
@@ -148,6 +152,41 @@ def intersect_other_contours(cnt: Contour, cnts: list, contour_num: int):
         if intersect_contours(cnt, other_cnt):
             return True
     return False
+
+
+#  optimal transfer contour to random position in polygon, all nodes will be in polygon
+def opt_transfer_to_poly(cnt: Contour, poly: Contour):
+    x, y, w, h = cv2.boundingRect(poly.get_cv_contour())
+    new_x = randint(x, x + w)
+    new_y = randint(y, y + h)
+    p = Point(new_x, new_y)
+    xM, yM = cnt.get_moments()
+    x_diff = p.x - xM
+    y_diff = p.y - yM
+    xM += x_diff
+    yM += y_diff
+    transfer_contour(cnt, x_diff, y_diff)
+    while not point_in_polygon(p, poly) or intersect_contours(cnt, poly):
+        new_x = randint(x, x + w)
+        new_y = randint(y, y + h)
+        p = Point(new_x, new_y)
+        x_diff = p.x - xM
+        y_diff = p.y - yM
+        xM += x_diff
+        yM += y_diff
+        transfer_contour(cnt, x_diff, y_diff)
+
+    max_transfers = 1000
+    step_x = 10
+    step_y = 10
+    transfer_count = 0
+    init_direct = 0
+    while transfer_count < max_transfers:
+        #  generate step  (x and y range ) and transfer contour (all nodes will be in polygon)
+        direct = generate_step_to_transfer(step_x, step_y, cnt, poly, init_direct)
+        transfer_count += 1
+        if init_direct != direct:
+            break
 
 
 #  transfer contour to random position in polygon, all nodes will be in polygon
